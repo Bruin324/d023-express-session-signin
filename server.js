@@ -29,7 +29,12 @@ application.use(session({
 }))
 
 application.get('/', (request, response) => {
-    response.render('index');
+    if (request.session.isAuthenticated != true){
+        response.render('index');
+    } else {
+        response.redirect('dashboard');
+    }
+    
 })
 
 application.get('/login', (request, response) => {
@@ -86,6 +91,12 @@ application.get('/dashboard', (request, response) => {
     }
     
     response.render('dashboard', user)
+})
+
+application.post('/logout', (request, response) => {
+    request.session.destroy(function(err) {
+    });
+    response.render('login');
 })
 
 application.listen(3000);
